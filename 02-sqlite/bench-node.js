@@ -7,10 +7,6 @@ db.exec('PRAGMA user_version = 100')
 
 const sql = 'pragma user_version'
 
-function createQuery (sql) {
-  return db.prepare(sql)
-}
-
 let total = parseInt(process.argv[2], 10)
 const runs = parseInt(process.argv[3], 10)
 
@@ -23,5 +19,5 @@ function bench (query) {
   if (--total) process.nextTick(() => bench(query))
 }
 
-const query = createQuery(sql)
+const query = db.prepare(sql)
 bench(() => query.get())

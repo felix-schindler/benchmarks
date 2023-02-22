@@ -11,6 +11,8 @@ db.run('PRAGMA temp_store = memory')
 db.run('PRAGMA locking_mode = exclusive')
 db.run('PRAGMA user_version = 100')
 
+const sql = 'pragma user_version'
+
 let total = parseInt(process.argv[2], 10)
 const runs = parseInt(process.argv[3], 10)
 
@@ -23,5 +25,5 @@ function bench (query) {
   if (--total) process.nextTick(() => bench(query))
 }
 
-const query = db.prepare('pragma user_version')
+const query = db.prepare(sql)
 bench(() => query.get())

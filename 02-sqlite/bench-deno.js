@@ -1,12 +1,12 @@
-import { DB } from "https://deno.land/x/sqlite/mod.ts"
-import { nextTick } from "https://deno.land/std@0.126.0/node/_next_tick.ts"
+import { Database } from "https://deno.land/x/sqlite3@0.8.0/mod.ts"
+import { nextTick } from "https://deno.land/std@0.177.0/node/_next_tick.ts"
 
-const db = new DB(':memory:')
+const db = new Database(':memory:')
 
-db.query('PRAGMA auto_vacuum = none')
-db.query('PRAGMA temp_store = memory')
-db.query('PRAGMA locking_mode = exclusive')
-db.query('PRAGMA user_version = 100')
+db.exec('PRAGMA auto_vacuum = none')
+db.exec('PRAGMA temp_store = memory')
+db.exec('PRAGMA locking_mode = exclusive')
+db.exec('PRAGMA user_version = 100')
 
 const sql = 'pragma user_version'
 
@@ -22,5 +22,5 @@ function bench (query) {
   if (--total) nextTick(() => bench(query))
 }
 
-const query = db.prepareQuery(sql)
-bench(() => query.one())
+const query = db.prepare(sql)
+bench(() => query.get())
